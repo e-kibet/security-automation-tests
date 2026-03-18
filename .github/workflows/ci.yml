@@ -15,4 +15,4 @@ jobs:
         run: npx tsx index.ts &
       - name: Wait for API to be ready
         run: sleep 5 && curl --retry 10 --retry-delay 2 --retry-connrefused http://localhost:3000/api/health
-      - run: docker run -t ghcr.io/zaproxy/zaproxy:stable zap-baseline.py -t http://host.docker.internal:3000 -r zap-report.html
+      - run: docker run -t -v $(pwd):/zap/wrk:rw ghcr.io/zaproxy/zaproxy:stable zap-baseline.py -t http://host.docker.internal:3000 -r zap-report.html
