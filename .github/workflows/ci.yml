@@ -11,4 +11,8 @@ jobs:
           node-version: 20
       - run: npm install
       - run: npm test
-      - run: docker run -t owasp/zap2docker-stable zap-baseline.py -t http://host.docker.internal:3000 -r zap-report.html
+      - name: Build and start API
+        run: npm run build && npm start &
+      - name: Wait for API to be ready
+        run: npx wait-on http://localhost:3000/api/health --timeout 30000
+      - run: docker run -t ghcr.io/zaproxy/zaproxy:stable zap-baseline.py -t http://host.docker.internal:3000 -r zap-report.html

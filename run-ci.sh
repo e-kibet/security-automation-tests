@@ -14,12 +14,12 @@ API_PID=$!
 sleep 5  # wait for API to start
 
 echo "Step 4: Run OWASP ZAP baseline scan..."
-docker run -t owasp/zap2docker-stable zap-baseline.py \
+docker run -t ghcr.io/zaproxy/zaproxy:stable zap-baseline.py \
   -t http://host.docker.internal:3000 \
   -r zap-baseline-report.html
 
 echo "Step 5: Run OWASP ZAP full scan..."
-docker run -t owasp/zap2docker-stable zap-full-scan.py \
+docker run -t ghcr.io/zaproxy/zaproxy:stable zap-full-scan.py \
   -t http://host.docker.internal:3000 \
   -r zap-full-report.html
 
