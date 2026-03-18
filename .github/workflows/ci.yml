@@ -15,4 +15,7 @@ jobs:
         run: npx tsx index.ts &
       - name: Wait for API to be ready
         run: sleep 5 && curl --retry 10 --retry-delay 2 --retry-connrefused http://localhost:3000/api/health
-      - run: docker run -t -v $(pwd):/zap/wrk:rw ghcr.io/zaproxy/zaproxy:stable zap-baseline.py -t http://host.docker.internal:3000 -r zap-report.html
+      - name: Run OWASP ZAP baseline scan
+        run: |
+          HOST_IP=$(hostname -I | awk '{print $1}')
+          docker run -t -v $(pwd):/zap/wrk:rw ghcr.io/zaproxy/zaproxy:stable zap-baseline.py -t http://$HOST_IP:3000 -r zap-report.html
