@@ -5,7 +5,7 @@ describe('API endpoints', () => {
   it('GET / returns welcome message', async () => {
     const res = await request(app).get('/');
     expect(res.status).toBe(200);
-    expect(res.body.message).toBe('Welcome to the Simple Express API with TypeScript!');
+    expect(res.body.message).toBe('Security Test API');
   });
 
   it('GET /api/health returns OK status', async () => {
