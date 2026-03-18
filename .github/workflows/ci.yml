@@ -11,8 +11,8 @@ jobs:
           node-version: 20
       - run: npm install
       - run: npm test
-      - name: Build and start API
-        run: npm run build && npm start &
+      - name: Start API in background
+        run: npx tsx index.ts &
       - name: Wait for API to be ready
-        run: npx wait-on http://localhost:3000/api/health --timeout 30000
+        run: sleep 5 && curl --retry 10 --retry-delay 2 --retry-connrefused http://localhost:3000/api/health
       - run: docker run -t ghcr.io/zaproxy/zaproxy:stable zap-baseline.py -t http://host.docker.internal:3000 -r zap-report.html
