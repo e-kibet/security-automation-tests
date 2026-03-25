@@ -18,4 +18,9 @@ jobs:
       - name: Run OWASP ZAP baseline scan
         run: |
           HOST_IP=$(hostname -I | awk '{print $1}')
-          docker run -t -v $(pwd):/zap/wrk:rw ghcr.io/zaproxy/zaproxy:stable zap-baseline.py -t http://$HOST_IP:3000 -r zap-report.html
+          TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
+          PROJECT_NAME=$(node -p "require('./package.json').name")
+          REPORT="${PROJECT_NAME}_zap-report_${TIMESTAMP}.html"
+          docker run -t -v $(pwd):/zap/wrk:rw ghcr.io/zaproxy/zaproxy:stable zap-baseline.py -t http://$HOST_IP:3000 -r $REPORT
+          sed -i "s|<title>ZAP Scanning Report</title>|<title>${PROJECT_NAME} - ZAP Security Report</title>|g" $REPORT
+          echo "ZAP report saved as $REPORT"
